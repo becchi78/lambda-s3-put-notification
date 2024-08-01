@@ -1,9 +1,10 @@
 name: CloudFormation Lint and Guard
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - 'feature/*'
+      - "feature/*"
 #  pull_request:
 #    branches:
 #      - 'main'
@@ -18,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install cfn-lint
         run: pip install cfn-lint
