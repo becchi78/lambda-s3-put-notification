@@ -25,10 +25,10 @@ jobs:
         run: pip install cfn-lint
 
       - name: Install cfn-guard
-        run: curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/aws-cloudformation/cloudformation-guard/main/install-guard.sh | sh
-
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/aws-cloudformation/cloudformation-guard/main/install-guard.sh | sudo sh
       - name: Run cfn-lint
         run: cfn-lint template.yaml
 
       - name: Run cfn-guard
-        run: cfn-guard validate -r ruleset.guard -d template.yaml
+        run: ~/.guard/bin/cfn-guard validate -r ruleset.guard -d template.yaml
