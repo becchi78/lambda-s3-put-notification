@@ -1,3 +1,7 @@
-RULE S3BucketPolicy IS
-  WHEN ResourceType == "AWS::S3::BucketPolicy"
-  CHECK Action NOT == "s3:*"
+let s3_actions = [ "s3:*" ]
+
+rule S3BucketPolicy when
+    ResourceType == "AWS::S3::BucketPolicy" {
+    let actions = Action
+    %actions NOT_CONTAINS_ANY %s3_actions
+}
