@@ -1,4 +1,10 @@
-rule S3BucketPolicy when ResourceType == "AWS::S3::BucketPolicy" {
-    let actions = Action
-    actions NOT_CONTAINS "s3:*"
+let aws_s3_resources = Resources.*[ Type == 'AWS::S3::Bucket' ]
+rule aws_s3 when %aws_s3_resources !empty {
+  %aws_s3_resources.Properties {
+    # CostTag check
+    some Tags[*] {
+      Key == "enviroment"
+      Value == "prod"
+    }
+  }
 }
