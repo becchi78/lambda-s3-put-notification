@@ -31,4 +31,4 @@ jobs:
         run: cfn-lint template.yaml
 
       - name: Run cfn-guard
-        run: ~/.guard/bin/cfn-guard validate -r ruleset.guard -d template.yaml
+        run: /home/runner/.guard/bin/cfn-guard validate -r ruleset.guard -d template.yaml
