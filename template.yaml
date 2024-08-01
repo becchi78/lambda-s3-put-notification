@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: lambda-s3-notification
+
+Resources:
+  # ---------------
+  # S3 bucket
+  # ---------------
+  S3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Ref S3BucketName
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: "s3:ObjectCreated:Put"
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: txt
+            Function: !GetAtt
+              - Lambda
+              - Arn
+
+  # ---------------
+  # Lambda
+  # ---------------
+  LambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: "my-s3-function-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+
+  Lambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+            print('lambda invoked!')
+      FunctionName: "trigger_lambda"
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaRole.Arn
+      Runtime: "python3.8"
+
+  LambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt
+        - Lambda
+        - Arn
+      Principal: "s3.amazonaws.com"
+      SourceArn: !Join
+        - ""
+        - - "arn:aws:s3:::"
+          - !Ref S3BucketName
