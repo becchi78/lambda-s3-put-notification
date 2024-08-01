@@ -24,6 +24,9 @@ Resources:
             Function: !GetAtt
               - Lambda
               - Arn
+      Tags:
+        - Key: enviroment
+          Value: prod
 
   # ---------------
   # Lambda
