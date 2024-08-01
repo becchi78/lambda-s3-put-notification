@@ -26,9 +26,7 @@ jobs:
 
       - name: Install cfn-guard
         run: |
-          curl -LO https://github.com/aws-cloudformation/cloudformation-guard/releases/latest/download/cfn-guard-linux
-          chmod +x cfn-guard-linux
-          sudo mv cfn-guard-linux /usr/local/bin/cfn-guard
+          $ curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/aws-cloudformation/cloudformation-guard/main/install-guard.sh | sh
 
       - name: Run cfn-lint
         run: cfn-lint template.yaml
