@@ -1,0 +1,36 @@
+name: CloudFormation Lint and Guard
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+#  pull_request:
+#    branches:
+#      - 'main'
+
+jobs:
+  lint-and-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install cfn-lint
+        run: pip install cfn-lint
+
+      - name: Install cfn-guard
+        run: |
+          curl -LO https://github.com/aws-cloudformation/cloudformation-guard/releases/latest/download/cfn-guard-linux
+          chmod +x cfn-guard-linux
+          sudo mv cfn-guard-linux /usr/local/bin/cfn-guard
+
+      - name: Run cfn-lint
+        run: cfn-lint template.yaml
+
+      - name: Run cfn-guard
+        run: cfn-guard validate -r ruleset.guard -d template.yaml

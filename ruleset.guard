@@ -1,0 +1,3 @@
+RULE S3BucketPolicy IS
+  WHEN ResourceType == "AWS::S3::BucketPolicy"
+  CHECK Action NOT == "s3:*"
