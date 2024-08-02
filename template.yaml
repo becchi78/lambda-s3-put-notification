@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   S3BucketName:
     Type: String
-    Default: lambda-s3-notification2
+    Default: lambda-s3-notification3
 
 Resources:
   # ---------------
@@ -54,7 +54,7 @@ Resources:
       Code:
         ZipFile: |
           def lambda_handler(event, context):
-            print('lambda invoked! 2')
+            print('lambda invoked! test')
       FunctionName: "trigger_lambda"
       Handler: index.lambda_handler
       Role: !GetAtt LambdaRole.Arn
