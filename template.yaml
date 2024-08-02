@@ -54,7 +54,7 @@ Resources:
       Code:
         ZipFile: |
           def lambda_handler(event, context):
-            print('lambda invoked!')
+            print('lambda invoked! 2')
       FunctionName: "trigger_lambda"
       Handler: index.lambda_handler
       Role: !GetAtt LambdaRole.Arn
