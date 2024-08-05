@@ -4,7 +4,8 @@ phases:
   build:
     commands:
       - echo "Starting Drift Detection"
-
+      - drift_detection_id=$(aws cloudformation detect-stack-drift --stack-name lambda-s3-put-notification --query StackDriftDetectionId --output text)
+      - echo "Drift Detection ID: $drift_detection_id"
 cache:
   paths:
     - '/root/.cache/pip'
