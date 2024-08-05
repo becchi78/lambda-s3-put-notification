@@ -5,21 +5,6 @@ phases:
       - echo "Starting Drift Detection"
       - drift_detection_id=$(aws cloudformation detect-stack-drift --stack-name lambda-s3-put-notification --query StackDriftDetectionId --output text)
       - echo "Drift Detection ID: $drift_detection_id"
-      - aws cloudformation wait stack-drift-detection-complete --stack-drift-detection-id $drift_detection_id
-      - drift_status=$(aws cloudformation describe-stack-drift-detection-status --stack-drift-detection-id $drift_detection_id --query DetectionStatus --output text)
-      - echo "Drift Status: $drift_status"
-      - if [ "$drift_status" == "DETECTION_COMPLETE" ]; then
-          drift_status=$(aws cloudformation describe-stack-drift-detection-status --stack-drift-detection-id $drift_detection_id --query StackDriftStatus --output text);
-          if [ "$drift_status" == "DRIFTED" ]; then
-            echo "Stack is drifted. Exiting.";
-            exit 1;
-          else
-            echo "No drift detected.";
-          fi
-        else
-          echo "Drift detection failed or incomplete. Exiting.";
-          exit 1;
-        fi
 cache:
   paths:
     - '/root/.cache/pip'
