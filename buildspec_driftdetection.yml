@@ -9,17 +9,17 @@ phases:
       - drift_status=$(aws cloudformation describe-stack-drift-detection-status --stack-drift-detection-id $drift_detection_id --query DetectionStatus --output text)
       - echo "Drift Status: $drift_status"
       - if [ "$drift_status" == "DETECTION_COMPLETE" ]; then
-        drift_status=$(aws cloudformation describe-stack-drift-detection-status --stack-drift-detection-id $drift_detection_id --query StackDriftStatus --output text);
-        if [ "$drift_status" == "DRIFTED" ]; then
-        echo "Stack is drifted. Exiting.";
-        exit 1;
+          drift_status=$(aws cloudformation describe-stack-drift-detection-status --stack-drift-detection-id $drift_detection_id --query StackDriftStatus --output text);
+          if [ "$drift_status" == "DRIFTED" ]; then
+            echo "Stack is drifted. Exiting.";
+            exit 1;
+          else
+            echo "No drift detected.";
+          fi
         else
-        echo "No drift detected.";
-        fi
-        else
-        echo "Drift detection failed or incomplete. Exiting.";
-        exit 1;
+          echo "Drift detection failed or incomplete. Exiting.";
+          exit 1;
         fi
 cache:
   paths:
-    - "/root/.cache/pip"
+    - '/root/.cache/pip'
